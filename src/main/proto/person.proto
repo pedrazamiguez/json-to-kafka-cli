@@ -1,0 +1,8 @@
+option java_package = "es.pedrazamiguez";
+option java_outer_classname = "PersonOuter";
+
+message Person {
+    required string name = 1;
+    required int32 id = 2;
+    optional string email = 3;
+}

@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf' version '0.9.5'
+    id 'application'
+}
+
+group = 'es.pedrazamiguez'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    picocliVersion = '4.7.7'
+    kafkaVersion = '3.8.0'
+    jacksonVersion = '2.17.2'
+    protobufVersion = '4.31.1'
+}
+
+dependencies {
+    implementation "info.picocli:picocli:${picocliVersion}"
+    annotationProcessor "info.picocli:picocli-codegen:${picocliVersion}"
+
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+application {
+    mainClass = 'es.pedrazamiguez.JsonToKafkaCli'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:${protobufVersion}"
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.register('fatJar', Jar) {
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
