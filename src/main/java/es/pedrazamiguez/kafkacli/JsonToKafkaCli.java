@@ -10,7 +10,7 @@ import picocli.CommandLine;
     name = "json2kafka",
     mixinStandardHelpOptions = true,
     version = "1.0",
-    description = "CLI tool to send JSON documents as Protobuf messages to Kafka broker",
+    description = "CLI tool to send JSON documents as Protobuf messages to a Kafka broker",
     subcommands = {
         SendCommand.class,
         ConsumeCommand.class
