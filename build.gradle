@@ -4,7 +4,7 @@ plugins {
     id 'application'
 }
 
-group = 'es.pedrazamiguez'
+group = 'es.pedrazamiguez.kafkacli'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -16,6 +16,9 @@ ext {
     kafkaVersion = '3.8.0'
     jacksonVersion = '2.17.2'
     protobufVersion = '4.31.1'
+    slf4jVersion = '2.0.17'
+    logbackVersion = '1.5.18'
+    junitVersion = '5.10.0'
 }
 
 dependencies {
@@ -28,13 +31,16 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
 
-    testImplementation platform('org.junit:junit-bom:5.10.0')
+    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+    runtimeOnly "ch.qos.logback:logback-classic:${logbackVersion}"
+
+    testImplementation platform("org.junit:junit-bom:${junitVersion}")
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 application {
-    mainClass = 'es.pedrazamiguez.JsonToKafkaCli'
+    mainClass = 'es.pedrazamiguez.kafkacli.JsonToKafkaCli'
 }
 
 protobuf {

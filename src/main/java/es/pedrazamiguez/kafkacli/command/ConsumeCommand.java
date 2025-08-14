@@ -1,9 +1,12 @@
-package es.pedrazamiguez;
+package es.pedrazamiguez.kafkacli.command;
 
 import com.google.protobuf.util.JsonFormat;
+import es.pedrazamiguez.PersonOuter;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -14,6 +17,8 @@ import java.util.concurrent.Callable;
 
 @Command(name = "consume", description = "Consume Protobuf messages from Kafka and print them")
 public class ConsumeCommand implements Callable<Integer> {
+
+  private static final Logger log = LoggerFactory.getLogger(ConsumeCommand.class);
 
   @Option(names = "--topic", required = true, description = "Kafka topic to consume from")
   private String topic;
@@ -32,14 +37,19 @@ public class ConsumeCommand implements Callable<Integer> {
 
     try (KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(props)) {
       consumer.subscribe(Collections.singleton(topic));
-      System.out.println("Listening to topic: " + topic);
+      log.info("Listening to topic: {}", topic);
 
       while (true) {
-        ConsumerRecords<String, byte[]> records = consumer.poll(Duration.ofSeconds(1));
-        for (ConsumerRecord<String, byte[]> record : records) {
-          var msg = PersonOuter.Person.parseFrom(record.value());
-          String json = JsonFormat.printer().print(msg);
-          System.out.println(json);
+        ConsumerRecords<String, byte[]> messages = consumer.poll(Duration.ofSeconds(1));
+        for (ConsumerRecord<String, byte[]> message : messages) {
+          final var protoMessage = PersonOuter.Person.parseFrom(message.value());
+          String json = JsonFormat.printer().print(protoMessage);
+          log.info("""
+              Message consumed:
+              
+              {}
+              
+              """, json);
         }
       }
     }

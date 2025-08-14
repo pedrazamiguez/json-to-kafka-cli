@@ -1,5 +1,7 @@
-package es.pedrazamiguez;
+package es.pedrazamiguez.kafkacli;
 
+import es.pedrazamiguez.kafkacli.command.ConsumeCommand;
+import es.pedrazamiguez.kafkacli.command.SendCommand;
 import picocli.CommandLine.Command;
 import picocli.CommandLine;
 
@@ -8,7 +10,7 @@ import picocli.CommandLine;
     name = "json2kafka",
     mixinStandardHelpOptions = true,
     version = "1.0",
-    description = "CLI tool for sending JSON as Protobuf to Kafka broker",
+    description = "CLI tool to send JSON documents as Protobuf messages to Kafka broker",
     subcommands = {
         SendCommand.class,
         ConsumeCommand.class
