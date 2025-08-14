@@ -46,6 +46,10 @@ This command will show the available sub-commands and options.
 
 ## Displaying Kafka topics and consumer groups on RedPanda
 
+## Create a standalone CLI tool
+
+Maybe a note on how to stop using `java -jar` and be able to run the tool directly as `json2kafka [-hV] [COMMAND]`.
+
 ## References
 
 - [Protobuf Gradle Plugin](https://github.com/google/protobuf-gradle-plugin)
