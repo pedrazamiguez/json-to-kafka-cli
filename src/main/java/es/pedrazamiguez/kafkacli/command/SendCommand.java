@@ -1,6 +1,6 @@
 package es.pedrazamiguez.kafkacli.command;
 
-import es.pedrazamiguez.PersonOuter;
+import es.pedrazamiguez.kafkacli.PersonOuter;
 import es.pedrazamiguez.kafkacli.mapper.ProtobufMapper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;

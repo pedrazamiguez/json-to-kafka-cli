@@ -2,8 +2,8 @@ package es.pedrazamiguez.kafkacli;
 
 import es.pedrazamiguez.kafkacli.command.ConsumeCommand;
 import es.pedrazamiguez.kafkacli.command.SendCommand;
-import picocli.CommandLine.Command;
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
 
 
 @Command(

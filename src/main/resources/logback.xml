@@ -6,8 +6,8 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="org.apache.kafka" level="ERROR" />
+    <logger name="org.apache.kafka" level="ERROR"/>
 </configuration>

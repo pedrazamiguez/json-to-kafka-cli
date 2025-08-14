@@ -9,10 +9,13 @@ This is a CLI tool to send JSON documents as Protobuf messages to a Kafka broker
 
 ## Running Kafka on Docker
 
-For convenience, there is a `docker-compose.yml` file that spins up a Kafka broker and a Zookeeper instance, as well as RedPanda, a web-based Kafka UI tool.
+For convenience, there is a `docker-compose.yml` file that spins up a Kafka broker and a Zookeeper instance, as well as
+RedPanda, a web-based Kafka UI tool.
 
-The mentioned `docker-compose.yml` file references environment variables that are expected to be read from a `.env` file.
-You can rename or copy the `.env.example` file to `.env` and adjust the values as needed, although you should not need to.
+The mentioned `docker-compose.yml` file references environment variables that are expected to be read from a `.env`
+file.
+You can rename or copy the `.env.example` file to `.env` and adjust the values as needed, although you should not need
+to.
 
 ```bash
 cp .env.example .env

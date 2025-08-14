@@ -2,7 +2,7 @@ package es.pedrazamiguez.kafkacli.mapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.pedrazamiguez.PersonOuter;
+import es.pedrazamiguez.kafkacli.PersonOuter;
 
 import java.io.IOException;
 
