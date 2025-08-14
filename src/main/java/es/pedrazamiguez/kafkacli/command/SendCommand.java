@@ -1,8 +1,7 @@
 package es.pedrazamiguez.kafkacli.command;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import es.pedrazamiguez.PersonOuter;
+import es.pedrazamiguez.kafkacli.mapper.ProtobufMapper;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -46,8 +45,8 @@ public class SendCommand implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    final byte[] jsonBytes = this.readJsonFile(jsonFile);
-    final PersonOuter.Person message = this.toPerson(jsonBytes);
+    final byte[] jsonBytes = Files.readAllBytes(jsonFile.toPath());
+    final PersonOuter.Person message = ProtobufMapper.toPerson(jsonBytes);
 
     final Properties producerProperties = this.createProducerProperties();
 
@@ -57,25 +56,6 @@ public class SendCommand implements Callable<Integer> {
     }
 
     return 0;
-  }
-
-  private byte[] readJsonFile(final File jsonFile) throws Exception {
-    return Files.readAllBytes(jsonFile.toPath());
-  }
-
-  private PersonOuter.Person toPerson(final byte[] jsonBytes) throws Exception {
-    final ObjectMapper mapper = new ObjectMapper();
-    final JsonNode jsonNode = mapper.readTree(jsonBytes);
-
-    final PersonOuter.Person.Builder builder = PersonOuter.Person.newBuilder();
-
-    builder.setName(jsonNode.get("name").asText());
-    builder.setId(jsonNode.get("id").asInt());
-    if (jsonNode.has("email")) {
-      builder.setEmail(jsonNode.get("email").asText());
-    }
-
-    return builder.build();
   }
 
   private Properties createProducerProperties() {
