@@ -19,7 +19,7 @@ import picocli.CommandLine;
 public class JsonToKafkaCli {
 
   public static void main(String[] args) {
-    int exitCode = new CommandLine(new JsonToKafkaCli()).execute(args);
+    final int exitCode = new CommandLine(new JsonToKafkaCli()).execute(args);
     System.exit(exitCode);
   }
 }
