@@ -150,7 +150,13 @@ Then run:
 ./build/install/json-to-kafka-cli/bin/json-to-kafka-cli --help
 ```
 
-You can also move the script in `build/install/json-to-kafka-cli/bin/json2kafka` to a directory in your `PATH`.
+You can also move the script in `build/install/json-to-kafka-cli/bin/json-to-kafka-cli` to a directory in your `PATH`.
+
+Then finally just type:
+
+```bash
+json-to-kafka-cli --help
+```
 
 ## References
 
