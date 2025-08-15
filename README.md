@@ -18,12 +18,11 @@ This project was developed with:
 ## Running Kafka with Docker
 
 For convenience, there is a `docker-compose.yml` file that spins up a Kafka broker and a Zookeeper instance, as well as
-RedPanda, a web-based Kafka UI tool.
+Redpanda, a web-based Kafka UI tool.
 
 The mentioned `docker-compose.yml` file references environment variables that are expected to be read from a `.env`
 file.
-You can rename or copy the `.env.example` file to `.env` and adjust values as needed, although you should not need
-to.
+You can rename or copy the `.env.example` file to `.env` and adjust values as needed, although you probably won't need to.
 
 ```bash
 cp .env.example .env
@@ -66,7 +65,7 @@ Example JSON (`person.json`):
 }
 ```
 
-Send it to Kafka, e.g.: to topic `people`:
+Send it to Kafka, for example, to topic `people`:
 
 ```bash
 java -jar build/libs/json-to-kafka-cli-1.0-SNAPSHOT-all.jar send ./person.json -t people
