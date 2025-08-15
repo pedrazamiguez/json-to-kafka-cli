@@ -22,7 +22,8 @@ Redpanda, a web-based Kafka UI tool.
 
 The mentioned `docker-compose.yml` file references environment variables that are expected to be read from a `.env`
 file.
-You can rename or copy the `.env.example` file to `.env` and adjust values as needed, although you probably won't need to.
+You can rename or copy the `.env.example` file to `.env` and adjust values as needed, although you probably won't need
+to.
 
 ```bash
 cp .env.example .env
@@ -116,7 +117,8 @@ java -jar build/libs/json-to-kafka-cli-1.0-SNAPSHOT-all.jar consume -t people -g
 ```
 
 > Note: Using a different consumer group allows you to consume messages independently from other consumers, which is
-  useful for testing or debugging purposes. Also, specifying the offset policy allows you to control where to start consuming.
+> useful for testing or debugging purposes. Also, specifying the offset policy allows you to control where to start
+> consuming.
 
 ## Displaying topics, messages and consumer groups in Redpanda
 
