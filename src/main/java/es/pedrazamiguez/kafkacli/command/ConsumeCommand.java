@@ -54,7 +54,7 @@ public class ConsumeCommand implements Callable<Integer> {
   private String bootstrapServers;
 
   @Option(
-      names = {"--timeout", "-i"},
+      names = {"--timeout", "-T"},
       defaultValue = "1200", // 20 minutes
       description = "Timeout in seconds for consuming messages. After this time, the consumer will stop listening to " +
           "the topic."
