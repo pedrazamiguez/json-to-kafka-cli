@@ -15,6 +15,14 @@ public final class ProtobufMapper {
     final ObjectMapper mapper = new ObjectMapper();
     final JsonNode jsonNode = mapper.readTree(jsonBytes);
 
+    if (!jsonNode.hasNonNull("name") || jsonNode.get("name").asText().isEmpty()) {
+      throw new IllegalArgumentException("name field is mandatory and cannot be empty");
+    }
+
+    if (!jsonNode.hasNonNull("id") || !jsonNode.get("id").isInt()) {
+      throw new IllegalArgumentException("id field is mandatory and must be an integer");
+    }
+
     final PersonOuter.Person.Builder builder = PersonOuter.Person.newBuilder();
 
     builder.setName(jsonNode.get("name").asText());
