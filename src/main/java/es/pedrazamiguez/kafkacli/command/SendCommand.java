@@ -19,6 +19,7 @@ import picocli.CommandLine.Parameters;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.time.Instant;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -61,7 +62,7 @@ public class SendCommand implements Callable<Integer> {
       log.error("Malformed JSON file {}: {}", jsonFile.getAbsolutePath(), e.getMessage());
       return 1;
     } catch (final IllegalArgumentException e) {
-      log.error("Invalid JSON: {}", e.getMessage());
+      log.error("Missing required fields: {}", e.getMessage());
       return 1;
     } catch (final Exception e) {
       log.error("Unexpected error while processing file {}: {}", jsonFile.getAbsolutePath(), e.getMessage());
@@ -70,7 +71,7 @@ public class SendCommand implements Callable<Integer> {
 
     final Properties producerProperties = this.createProducerProperties();
     try (KafkaProducer<String, byte[]> producer = new KafkaProducer<>(producerProperties)) {
-      final String messageKey = String.valueOf(System.nanoTime());
+      final String messageKey = String.valueOf(Instant.now().toEpochMilli());
       producer.send(new ProducerRecord<>(topic, messageKey, message.toByteArray())).get();
       log.info("Message with key {} sent to topic: {}", messageKey, topic);
     } catch (final TimeoutException e) {

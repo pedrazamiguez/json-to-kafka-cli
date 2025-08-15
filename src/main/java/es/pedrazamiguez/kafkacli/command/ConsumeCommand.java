@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -51,15 +53,24 @@ public class ConsumeCommand implements Callable<Integer> {
   )
   private String bootstrapServers;
 
+  @Option(
+      names = {"--timeout", "-i"},
+      defaultValue = "1200", // 20 minutes
+      description = "Timeout in seconds for consuming messages. After this time, the consumer will stop listening to " +
+          "the topic."
+  )
+  private long timeoutSeconds;
+
   @Override
   public Integer call() throws Exception {
+    final Instant startTime = Instant.now();
     final Properties consumerProperties = this.createConsumerProperties();
 
     try (final KafkaConsumer<String, byte[]> consumer = new KafkaConsumer<>(consumerProperties)) {
-      consumer.subscribe(Collections.singleton(topic));
-      log.info("Listening to topic: {}", topic);
+      consumer.subscribe(Collections.singleton(this.topic));
+      log.info("Listening to topic for {} seconds: {}", this.timeoutSeconds, this.topic);
 
-      while (true) {
+      while (Duration.between(startTime, Instant.now()).getSeconds() < this.timeoutSeconds) {
         final ConsumerRecords<String, byte[]> consumerRecords = consumer.poll(Duration.ofSeconds(1));
         for (final ConsumerRecord<String, byte[]> consumerRecord : consumerRecords) {
           final var protoMessage = PersonOuter.Person.parseFrom(consumerRecord.value());
@@ -72,7 +83,14 @@ public class ConsumeCommand implements Callable<Integer> {
               """, jsonMessage);
         }
       }
+
+      log.info("Timeout reached. Stopping consumer after {} seconds.", this.timeoutSeconds);
+      return 0;
+    } catch (final KafkaException e) {
+      log.error("Error consuming messages from topic {}: {}", this.topic, e.getMessage());
+      return 1;
     }
+
   }
 
   private Properties createConsumerProperties() {
